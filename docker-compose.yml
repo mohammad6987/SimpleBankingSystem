@@ -8,7 +8,7 @@ services:
     environment:
       - ORACLE_PASSWORD=1234
     volumes:
-      - oracle-data:/opt/oracle/oradata # Path for persistent data
+      - oracle-data:/opt/oracle/oradata
       - ./db-init:/docker-entrypoint-initdb.d 
 volumes:
   oracle-data:
