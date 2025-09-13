@@ -4,6 +4,14 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
+
+public enum AccountStatus {
+    ACTIVE,
+    INACTIVE,
+    BLOCKED
+}
+
+
 @Entity
 @Table(name = "accounts")
 public class Account {
@@ -16,7 +24,7 @@ public class Account {
 
     private BigDecimal balance;
 
-    private String status;
+    private AccountStatus status;
 
     private LocalDateTime createdAt;
 
@@ -31,7 +39,7 @@ public class Account {
     public BigDecimal getBalance() { return balance; }
     public void setBalance(BigDecimal balance) { this.balance = balance; }
 
-    public String getStatus() { return status; }
+    public String getStatus() { return status.toString(); }
     public void setStatus(String status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
