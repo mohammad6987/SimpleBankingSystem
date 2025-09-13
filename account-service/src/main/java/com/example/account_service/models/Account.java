@@ -9,9 +9,8 @@ import jakarta.persistence.*;
 public class Account {
 
     @Id
-    private String accountNumber;
+    private Long accountNumber;
 
-    // Instead of @ManyToOne → just store the customer ID
     @Column(name = "customer_id", nullable = false)
     private String customerId;
 
@@ -23,11 +22,8 @@ public class Account {
 
     private LocalDateTime updatedAt;
 
-    // 🚫 Removed transaction relations
-
-    // Getters & Setters
-    public String getAccountNumber() { return accountNumber; }
-    public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
+    public Long getAccountNumber() { return accountNumber; }
+    public void setAccountNumber(Long accountNumber) { this.accountNumber = accountNumber; }
 
     public String getCustomerId() { return customerId; }
     public void setCustomerId(String customerId) { this.customerId = customerId; }
