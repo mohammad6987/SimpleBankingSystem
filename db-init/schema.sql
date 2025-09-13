@@ -1,9 +1,10 @@
 CREATE TABLE IF NOT EXISTS customers (
-    id              NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    account_number  VARCHAR2(14 CHAR) UNIQUE NOT NULL,
     name            VARCHAR2(100) NOT NULL,
-    national_id     VARCHAR2(20) UNIQUE NOT NULL,
+    national_id     VARCHAR2(20) PRIMARY KEY,
     customer_type   VARCHAR2(20) CHECK (customer_type IN ('individual', 'corporate')) NOT NULL,
     dob             DATE NOT NULL,
+    nationality     VARCHAR2(50) NOT NULL,
     phone           VARCHAR2(20) NOT NULL,
     address         VARCHAR2(255) NOT NULL,
     postal_code     VARCHAR2(20) NOT NULL,
@@ -14,12 +15,8 @@ CREATE TABLE IF NOT EXISTS customers (
 
 CREATE TABLE IF NOT EXISTS accounts (
     account_number  VARCHAR2(14 CHAR) PRIMARY KEY,
-    customer_id     NUMBER NOT NULL,
-    balance         NUMBER(18,2) DEFAULT 0 CHECK (balance >= 0),
+   balance         NUMBER(18,2) DEFAULT 0 CHECK (balance >= 0),
     status          VARCHAR2(20) DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE', 'BLOCKED')) NOT NULL,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP,
-    CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
     CONSTRAINT chk_account_number_format CHECK (REGEXP_LIKE(account_number, '^[0-9]{14}$'))
 );
 
@@ -60,7 +57,7 @@ CREATE TABLE fee_config (
 
 
 
-CREATE INDEX idx_account_customer ON accounts(customer_id);
+--CREATE INDEX idx_account_customer ON accounts(account_number);
 CREATE INDEX idx_transaction_from ON transactions(account_from);
 CREATE INDEX idx_transaction_to ON transactions(account_to);
 CREATE INDEX idx_transaction_created ON transactions(created_at);
@@ -75,26 +72,3 @@ CREATE TABLE system_logs (
 );
 
 
-
-INSERT INTO customers (name, national_id, customer_type, dob, phone, address, postal_code)
-VALUES ('Ali Rezaei', '1234567890', 'individual', TO_DATE('1990-05-15', 'YYYY-MM-DD'), '09123456789', 'Tehran, Iran', '12345');
-
-INSERT INTO customers (name, national_id, customer_type, dob, phone, address, postal_code)
-VALUES ('Sara Mohammadi', '9876543210', 'individual', TO_DATE('1992-08-20', 'YYYY-MM-DD'), '09198765432', 'Mashhad, Iran', '54321');
-
-INSERT INTO customers (name, national_id, customer_type, dob, phone, address, postal_code)
-VALUES ('Parsian Corp', '1122334455', 'corporate', TO_DATE('2005-01-01', 'YYYY-MM-DD'), '02112345678', 'Tehran, Iran', '11111');
-
-COMMIT;
-
-
-INSERT INTO accounts (account_number, customer_id, balance, status)
-VALUES ('AC001', 1, 1000, 'active');
-
-INSERT INTO accounts (account_number, customer_id, balance, status)
-VALUES ('AC002', 2, 500, 'active');
-
-INSERT INTO accounts (account_number, customer_id, balance, status)
-VALUES ('AC003', 3, 10000, 'active');
-
-COMMIT;
