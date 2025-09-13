@@ -11,3 +11,8 @@ spring:
     show-sql: ${SPRING_JPA_SHOW_SQL:true}
     database-platform: org.hibernate.dialect.OracleDialect
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: ${RABBITMQ_USERNAME:myuser}
+    password: ${RABBITMQ_PASSWORD:mypassword}

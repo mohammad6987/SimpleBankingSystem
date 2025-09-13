@@ -13,19 +13,20 @@ CREATE TABLE IF NOT EXISTS customers (
 
 
 CREATE TABLE IF NOT EXISTS accounts (
-    account_number  VARCHAR2(20) PRIMARY KEY,
+    account_number  VARCHAR2(14 CHAR) PRIMARY KEY,
     customer_id     NUMBER NOT NULL,
     balance         NUMBER(18,2) DEFAULT 0 CHECK (balance >= 0),
-    status          VARCHAR2(20) DEFAULT 'active' CHECK (status IN ('active', 'inactive', 'blocked')) NOT NULL,
+    status          VARCHAR2(20) DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'INACTIVE', 'BLOCKED')) NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP,
     CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(id)
+    CONSTRAINT chk_account_number_format CHECK (REGEXP_LIKE(account_number, '^[0-9]{14}$'))
 );
 
 
 CREATE TABLE IF NOT EXISTS account_history (
     id            NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    account_number VARCHAR2(20) NOT NULL,
+    account_number VARCHAR2(14 CHAR) NOT NULL,
     field_name    VARCHAR2(50) NOT NULL,
     old_value     VARCHAR2(255),
     new_value     VARCHAR2(255),
@@ -58,7 +59,7 @@ CREATE TABLE fee_config (
 );
 
 
--- CREATE INDEX idx_customer_national_id ON customers(national_id);
+
 CREATE INDEX idx_account_customer ON accounts(customer_id);
 CREATE INDEX idx_transaction_from ON transactions(account_from);
 CREATE INDEX idx_transaction_to ON transactions(account_to);
@@ -74,7 +75,7 @@ CREATE TABLE system_logs (
 );
 
 
--- Insert some customers
+
 INSERT INTO customers (name, national_id, customer_type, dob, phone, address, postal_code)
 VALUES ('Ali Rezaei', '1234567890', 'individual', TO_DATE('1990-05-15', 'YYYY-MM-DD'), '09123456789', 'Tehran, Iran', '12345');
 
@@ -86,7 +87,7 @@ VALUES ('Parsian Corp', '1122334455', 'corporate', TO_DATE('2005-01-01', 'YYYY-M
 
 COMMIT;
 
--- Create accounts for the customers
+
 INSERT INTO accounts (account_number, customer_id, balance, status)
 VALUES ('AC001', 1, 1000, 'active');
 

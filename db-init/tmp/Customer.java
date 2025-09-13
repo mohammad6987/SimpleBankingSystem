@@ -34,8 +34,7 @@ public class Customer {
 
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Account> accounts;
+    private List<String> accounts;
 
 
     public Long getId() {
@@ -118,11 +117,11 @@ public class Customer {
         this.updatedAt = updatedAt;
     }
 
-    public List<Account> getAccounts() {
+    public List<String> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Account> accounts) {
+    public void setAccounts(List<String> accounts) {
         this.accounts = accounts;
     }
 }

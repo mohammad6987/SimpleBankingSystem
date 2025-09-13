@@ -3,44 +3,47 @@ package com.example.account_service.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
-
-
-public enum AccountStatus {
-    ACTIVE,
-    INACTIVE,
-    BLOCKED
-}
-
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "accounts")
 public class Account {
 
     @Id
-    private Long accountNumber;
+    @Column(name = "account_number", length = 14)
+    @Pattern(regexp = "\\d{14}", message = "Account number must be exactly 14 digits")
+    private String accountNumber; 
 
     @Column(name = "customer_id", nullable = false)
-    private String customerId;
+    private Long customerId;
 
-    private BigDecimal balance;
+    @Column(nullable = false)
+    private BigDecimal balance = BigDecimal.ZERO;
 
-    private AccountStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AccountStatus status = AccountStatus.ACTIVE;
 
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Long getAccountNumber() { return accountNumber; }
-    public void setAccountNumber(Long accountNumber) { this.accountNumber = accountNumber; }
+    // --- Getters & Setters ---
 
-    public String getCustomerId() { return customerId; }
-    public void setCustomerId(String customerId) { this.customerId = customerId; }
+    public String getAccountNumber() { return accountNumber; }
+    public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
+
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
 
     public BigDecimal getBalance() { return balance; }
     public void setBalance(BigDecimal balance) { this.balance = balance; }
 
-    public String getStatus() { return status.toString(); }
-    public void setStatus(String status) { this.status = status; }
+    public AccountStatus getStatus() { return status; }
+    public void setStatus(AccountStatus status) { this.status = status; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

@@ -12,7 +12,7 @@ public class AccountHistory {
     private Long id;
 
     @Column(name = "account_number", nullable = false)
-    private Long accountNumber;
+    private String accountNumber;
 
     @Column(name = "field_name", nullable = false)
     private String fieldName;

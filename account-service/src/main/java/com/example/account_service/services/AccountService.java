@@ -21,31 +21,30 @@ public class AccountService {
         this.accountRepo = accountRepo;
         this.historyService = historyService;
     }
+    @Transactional
+    public Account createAccount(String nationalId, AccountStatus status, String createdBy) {
+    CustomerResponse customer = customerClient.getCustomerByNationalId(nationalId);
 
-    public Account createAccount(Long accountNumber,
-                                 String customerId,
-                                 AccountStatus status,
-                                 String createdBy) {
-        Account account = new Account();
-        account.setAccountNumber(accountNumber);
-        account.setCustomerId(customerId);
-        account.setBalance(BigDecimal.ZERO);
-        account.setStatus(status != null ? status : AccountStatus.ACTIVE);
-        account.setCreatedAt(LocalDateTime.now());
-        account.setUpdatedAt(LocalDateTime.now());
+    Account account = new Account();
+    account.setCustomerId(Long.valueOf(customer.getCustomerId()));
+    account.setBalance(BigDecimal.ZERO);
+    account.setStatus(status != null ? status : AccountStatus.ACTIVE);
+    account.setCreatedAt(LocalDateTime.now());
+    account.setUpdatedAt(LocalDateTime.now());
 
-        Account saved = accountRepo.save(account);
+    Account saved = accountRepo.save(account);
 
-        historyService.logChange(
-                saved.getAccountNumber().toString(),
-                "CREATE_ACCOUNT",
-                null,
-                "Created with status: " + saved.getStatus(),
-                createdBy
-        );
+    historyService.logChange(
+            saved.getAccountNumber().toString(),
+            "CREATE_ACCOUNT",
+            null,
+            "Created with status: " + saved.getStatus(),
+            createdBy
+    );
 
-        return saved;
-    }
+    return saved;
+}
+
 
     @Transactional
     public Account deposit(Long accountNumber, BigDecimal amount, String changedBy) {

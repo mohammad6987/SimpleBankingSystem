@@ -17,16 +17,16 @@ public class Transaction {
     private String trackingCode;
 
     @Column(nullable = false)
-    private String type; // deposit, withdraw, transfer
+    private String type;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
     @JoinColumn(name = "account_from")
-    private Account accountFrom;
+    private String accountFrom;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
     @JoinColumn(name = "account_to")
-    private Account accountTo;
+    private String accountTo;
 
     @Column(nullable = false)
     private BigDecimal amount;
@@ -63,19 +63,19 @@ public class Transaction {
         this.type = type;
     }
 
-    public Account getAccountFrom() {
+    public String getAccountFrom() {
         return accountFrom;
     }
 
-    public void setAccountFrom(Account accountFrom) {
+    public void setAccountFrom(String accountFrom) {
         this.accountFrom = accountFrom;
     }
 
-    public Account getAccountTo() {
+    public String getAccountTo() {
         return accountTo;
     }
 
-    public void setAccountTo(Account accountTo) {
+    public void setAccountTo(String accountTo) {
         this.accountTo = accountTo;
     }
 
