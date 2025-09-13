@@ -8,17 +8,23 @@ public class TransactionRequest {
     private String destinationAccount;
     private BigDecimal amount;
 
-    public TransactionRequest(String type , String source , String dest , String amount){
-        self.type =type;
-        self.sourceAccount = source;
-        self.destinationAccount = dest;
-        self.amount = amount;
+    public TransactionRequest(String type , String source , String dest , BigDecimal amount){
+    this.type =type;
+    this.sourceAccount = source;
+    this.destinationAccount = dest;
+    this.amount = amount;
     }
     public String getType() {
         return type;
     }
     public String getSource(){
         return sourceAccount;
+    }
+    public String getDest(){
+        return destinationAccount;
+    }
+    public BigDecimal getAmount(){
+        return amount;
     }
 
 

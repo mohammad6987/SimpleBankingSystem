@@ -1,5 +1,13 @@
 version: "3.9"
 services:
+
+  rabbitmq:
+    image: docker.arvancloud.ir/rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # broker
+      - "15672:15672" # management UI
+
   oracle-db:
     image: docker.arvancloud.ir/gvenzl/oracle-free:23.4-slim
     container_name: oracle-db
