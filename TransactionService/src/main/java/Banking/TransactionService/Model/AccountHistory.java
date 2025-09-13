@@ -15,7 +15,7 @@ public class AccountHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_number", referencedColumnName = "account_number", nullable = false)
-    private Account account;
+    private Customer account;
 
     @Column(name = "field_name", nullable = false, length = 50)
     private String fieldName;
@@ -46,11 +46,11 @@ public class AccountHistory {
         this.id = id;
     }
 
-    public Account getAccount() {
+    public Customer getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(Customer account) {
         this.account = account;
     }
 

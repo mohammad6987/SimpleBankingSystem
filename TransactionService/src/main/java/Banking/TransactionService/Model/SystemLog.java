@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.PrePersist; 
+
 import lombok.*;
 @Entity
 @Table(name = "system_logs")
@@ -21,7 +23,7 @@ public class SystemLog {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-
+    @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }

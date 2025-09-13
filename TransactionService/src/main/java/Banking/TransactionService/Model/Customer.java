@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import jakarta.persistence.PrePersist;
+
+
+
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -52,16 +56,17 @@ public class Customer {
         corporate
     }
 
-
+    @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
     
+    @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
 
-    // Getters and Setters
+
     public String getAccountNumber() {
         return accountNumber;
     }
