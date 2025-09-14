@@ -41,6 +41,7 @@ public class Transaction {
     private TransactionStatus status;
 
     @Column(name = "created_at", updatable = false)
+
     private LocalDateTime createdAt;
 
     public enum TransactionType {
@@ -55,7 +56,7 @@ public class Transaction {
         failed
     }
 
-
+    @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }

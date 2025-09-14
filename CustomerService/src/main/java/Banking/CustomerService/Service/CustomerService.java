@@ -100,7 +100,7 @@ public class CustomerService {
         }
         String oldValue = null;
         
-        // Update the specific field and get the old value
+
         switch (fieldName.toLowerCase()) {
             case "name":
                 oldValue = customer.getName();
