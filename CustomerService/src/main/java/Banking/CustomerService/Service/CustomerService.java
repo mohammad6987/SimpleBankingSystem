@@ -3,10 +3,12 @@ package Banking.CustomerService.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import Banking.CustomerService.DTO.CustomerRequest;
+import Banking.CustomerService.Config.RabbitMQConfig;
+import Banking.CustomerService.DTO.*;
 import Banking.CustomerService.Model.ChangeLog;
 import Banking.CustomerService.Model.Customer;
 import Banking.CustomerService.Model.Customer.CustomerType;
@@ -22,6 +24,8 @@ public class CustomerService {
     private CustomerRepository customerRepository;
     @Autowired
     private ChangeLogRepository changeLogRepository;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     public Optional<Customer> getCustomerByNationalId(String nationalId) {
@@ -48,14 +52,35 @@ public class CustomerService {
         customer.setAddress(cr.getAddress());
         customer.setPostalCode(cr.getPostalCode());
 
+        Customer saved =  customerRepository.save(customer);
+        sendAccountCreationMessage(saved);
+        return saved;
 
 
-        // adding accont in transaction service
+    }
 
 
-
-
-        return customerRepository.save(customer);
+    private void sendAccountCreationMessage(Customer customer) {
+        try {
+            AccountCreationMessage message = new AccountCreationMessage(
+                customer.getNationalId(),
+                customer.getAccountNumber(),
+                customer.getName(),
+                customer.getCustomerType().name()
+            );
+            
+            rabbitTemplate.convertAndSend(
+                RabbitMQConfig.ACCOUNT_CREATION_QUEUE, 
+                message
+            );
+            
+            
+            System.out.println("Sent account creation message for customer: " + customer.getNationalId());
+        } catch (Exception e) {
+            
+            System.err.println("Failed to send account creation message: " + e.getMessage());
+            
+        }
     }
 
 
