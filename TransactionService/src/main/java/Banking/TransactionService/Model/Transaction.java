@@ -47,7 +47,8 @@ public class Transaction {
     public enum TransactionType {
         deposit,
         withdraw,
-        transfer
+        transfer,
+        fee
     }
 
     public enum TransactionStatus {

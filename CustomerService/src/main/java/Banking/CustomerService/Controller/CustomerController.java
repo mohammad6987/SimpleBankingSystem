@@ -1,6 +1,7 @@
 package Banking.CustomerService.Controller;
 
 
+import Banking.CustomerService.DTO.CustomerUpdateRequest;
 import Banking.CustomerService.DTO.CustomerRequest;
 import Banking.CustomerService.Model.Customer;
 
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,7 +24,7 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody CustomerRequest customerRequest) {
         try {
-            Customer.CustomerType customerType = Customer.CustomerType.valueOf(customerRequest.getCustomerType());
+            
             Customer customer = customerService.createCustomer(
                 customerRequest
             );
@@ -47,10 +47,10 @@ public class CustomerController {
 
     
     @PutMapping("/{nationalId}")
-    public ResponseEntity<?> updateCustomer(@PathVariable String nationalId, @RequestBody CustomerRequest customerUpdateRequest) {
+    public ResponseEntity<?> updateCustomer(@PathVariable String nationalId, @RequestBody CustomerUpdateRequest customerUpdateRequest) {
         try {
             Customer customer = customerService.updateCustomerField(
-                nationalId,customerUpdateRequest.getField_name() , customerUpdateRequest.getNewValue() , customerUpdateRequest.getAccount_number()
+                nationalId,customerUpdateRequest.getFieldName() , customerUpdateRequest.getNewValue() , customerUpdateRequest.getAccount_Id()
             );
             return new ResponseEntity<>(customer, HttpStatus.OK);
         } catch (IllegalArgumentException e) {

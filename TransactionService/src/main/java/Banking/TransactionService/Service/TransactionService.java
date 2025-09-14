@@ -10,6 +10,8 @@ import Banking.TransactionService.DTO.TransactionMessage;
 import Banking.TransactionService.Config.TransferFeeConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +36,7 @@ public class TransactionService {
     protected TransferFeeConfig transferFeeConfig;
 
     @Transactional
-    public Account deposit(String accountNumber, BigDecimal amount) {
+    public Transaction deposit(String accountNumber, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Deposit amount must be positive");
         }
@@ -51,7 +53,6 @@ public class TransactionService {
             throw new IllegalStateException("Cannot deposit to inactive or blocked account: " + accountNumber);
         }
 
-        
         Transaction transaction = createTransaction(
             TransactionType.deposit,
             null, 
@@ -61,21 +62,17 @@ public class TransactionService {
         );
         
         try {
-            
             BigDecimal newBalance = account.getBalance().add(amount);
             account.setBalance(newBalance);
-            Account updatedAccount = accountRepository.save(account);
-            
+            accountRepository.save(account);
             
             transaction.setStatus(TransactionStatus.success);
-            transactionRepository.save(transaction);
+            Transaction savedTransaction = transactionRepository.save(transaction);
             
+            sendTransactionMessage(savedTransaction, account);
             
-            sendTransactionMessage(transaction, updatedAccount);
-            
-            return updatedAccount;
+            return savedTransaction;
         } catch (Exception e) {
-
             transaction.setStatus(TransactionStatus.failed);
             transactionRepository.save(transaction);
             throw e;
@@ -83,7 +80,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public Account withdraw(String accountNumber, BigDecimal amount) {
+    public Transaction withdraw(String accountNumber, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Withdrawal amount must be positive");
         }
@@ -104,7 +101,6 @@ public class TransactionService {
             throw new IllegalStateException("Insufficient funds in account: " + accountNumber);
         }
 
-
         Transaction transaction = createTransaction(
             TransactionType.withdraw,
             account, 
@@ -114,21 +110,17 @@ public class TransactionService {
         );
         
         try {
-           
             BigDecimal newBalance = account.getBalance().subtract(amount);
             account.setBalance(newBalance);
-            Account updatedAccount = accountRepository.save(account);
-            
+            accountRepository.save(account);
             
             transaction.setStatus(TransactionStatus.success);
-            transactionRepository.save(transaction);
+            Transaction savedTransaction = transactionRepository.save(transaction);
             
+            sendTransactionMessage(savedTransaction, account);
             
-            sendTransactionMessage(transaction, updatedAccount);
-            
-            return updatedAccount;
+            return savedTransaction;
         } catch (Exception e) {
-            
             transaction.setStatus(TransactionStatus.failed);
             transactionRepository.save(transaction);
             throw e;
@@ -136,7 +128,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public void transfer(String fromAccountNumber, String toAccountNumber, BigDecimal amount) {
+    public Transaction transfer(String fromAccountNumber, String toAccountNumber, BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Transfer amount must be positive");
         }
@@ -171,19 +163,16 @@ public class TransactionService {
             throw new IllegalStateException("Cannot transfer to inactive or blocked account: " + toAccountNumber);
         }
 
-        // Check if source account has enough balance for amount + fee
         if (fromAccount.getBalance().compareTo(totalDebit) < 0) {
             throw new IllegalStateException("Insufficient funds in source account for transfer amount plus fee: " + fromAccountNumber);
         }
 
-        // Get bank account for fee collection
         Optional<Account> optionalBankAccount = accountRepository.findByAccountNumberWithLock(transferFeeConfig.getBankAccountNumber());
         if (optionalBankAccount.isEmpty()) {
             throw new IllegalStateException("Bank account for fee collection not found: " + transferFeeConfig.getBankAccountNumber());
         }
         Account bankAccount = optionalBankAccount.get();
 
-        // Create main transfer transaction record
         Transaction transferTransaction = createTransaction(
             TransactionType.transfer,
             fromAccount,
@@ -193,14 +182,12 @@ public class TransactionService {
         );
         
         try {
-            // Update account balances for the main transfer
             BigDecimal fromNewBalance = fromAccount.getBalance().subtract(amount);
             fromAccount.setBalance(fromNewBalance);
             
             BigDecimal toNewBalance = toAccount.getBalance().add(amount);
             toAccount.setBalance(toNewBalance);
 
-            // Create fee transaction record
             Transaction feeTransaction = createTransaction(
                 TransactionType.fee,
                 fromAccount,
@@ -209,30 +196,26 @@ public class TransactionService {
                 BigDecimal.ZERO
             );
             
-            // Update account balances for the fee
             fromNewBalance = fromAccount.getBalance().subtract(fee);
             fromAccount.setBalance(fromNewBalance);
             
             BigDecimal bankNewBalance = bankAccount.getBalance().add(fee);
             bankAccount.setBalance(bankNewBalance);
 
-            // Save all accounts
             accountRepository.save(fromAccount);
             accountRepository.save(toAccount);
             accountRepository.save(bankAccount);
             
-            // Update transaction status to success
             transferTransaction.setStatus(TransactionStatus.success);
             feeTransaction.setStatus(TransactionStatus.success);
-            transactionRepository.save(transferTransaction);
+            Transaction savedTransferTransaction = transactionRepository.save(transferTransaction);
             transactionRepository.save(feeTransaction);
             
-            // Send messages to RabbitMQ for both transactions
             sendTransactionMessage(transferTransaction, fromAccount);
             sendTransactionMessage(feeTransaction, fromAccount);
             
+            return savedTransferTransaction;
         } catch (Exception e) {
-            // Update transaction status to failed
             transferTransaction.setStatus(TransactionStatus.failed);
             transactionRepository.save(transferTransaction);
             throw e;
@@ -240,10 +223,8 @@ public class TransactionService {
     }
 
     private BigDecimal calculateTransferFee(BigDecimal amount) {
-        // Calculate percentage fee
         BigDecimal percentageFee = amount.multiply(transferFeeConfig.getPercentage());
         
-        // Apply minimum and maximum constraints
         BigDecimal fee = percentageFee.max(transferFeeConfig.getMinFee());
         fee = fee.min(transferFeeConfig.getMaxFee());
         
@@ -300,5 +281,20 @@ public class TransactionService {
         }
         
         return optionalAccount.get().getBalance();
+    }
+
+    public Transaction getTransactionByTrackingCode(String trackingCode) {
+        return transactionRepository.findByTrackingCode(trackingCode);
+    }
+
+    public Page<Transaction> getTransactionHistory(String accountNumber, Pageable pageable) {
+        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(accountNumber);
+        
+        if (optionalAccount.isEmpty()) {
+            throw new IllegalArgumentException("Account not found: " + accountNumber);
+        }
+        
+        Account account = optionalAccount.get();
+        return transactionRepository.findByAccountFromOrAccountTo(account, account, pageable);
     }
 }
