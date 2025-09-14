@@ -16,3 +16,10 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:myuser}
     password: ${RABBITMQ_PASSWORD:mypassword}
+
+  security:
+    jdbc:
+      users-by-username-query: |
+        SELECT username, password, enabled FROM users WHERE username = ?
+      authorities-by-username-query: |
+        SELECT username, authority FROM authorities WHERE username = ?  
