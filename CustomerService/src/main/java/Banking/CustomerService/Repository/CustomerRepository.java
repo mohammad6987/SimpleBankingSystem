@@ -1,9 +1,9 @@
-package Banking.TransactionService.Repository;
+package Banking.CustomerService.Repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import Banking.TransactionService.Model.Customer;
+import Banking.CustomerService.Model.Customer;
 import java.util.Optional;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package Banking.TransactionService.Model;
+package Banking.CustomerService.Model;
 
 
 
@@ -65,7 +65,6 @@ public class Customer {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 
     public String getAccountNumber() {
         return accountNumber;
