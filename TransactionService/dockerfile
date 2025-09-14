@@ -1,0 +1,30 @@
+# -------- Stage 1: Build the JAR --------
+FROM maven:3.9.8-eclipse-temurin-21 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy only pom.xml first (for dependency caching)
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Copy the rest of the source code
+COPY src ./src
+
+# Package the application (skip tests if you want)
+RUN mvn clean package -DskipTests
+
+# -------- Stage 2: Run the JAR --------
+FROM eclipse-temurin:21-jre
+
+# Set working directory
+WORKDIR /app
+
+# Copy the built jar from the previous stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose the port (change if your app uses a different port)
+EXPOSE 8090
+
+# Start the application
+ENTRYPOINT ["java", "-jar", "app.jar"]

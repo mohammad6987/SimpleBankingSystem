@@ -20,7 +20,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    // Create a new customer
+   
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody CustomerRequest customerRequest) {
         try {
