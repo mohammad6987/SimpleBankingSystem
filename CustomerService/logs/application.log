@@ -275,3 +275,8 @@ This generated password is for development use only. Your security configuration
   "newValue": "EU"
 }
 ]
+2025-09-16T02:15:12.848+03:30  INFO 208914 --- [CustomerService] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-16T02:15:12.852+03:30  INFO 208914 --- [CustomerService] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-16T02:15:12.859+03:30  INFO 208914 --- [CustomerService] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-16T02:15:12.861+03:30  INFO 208914 --- [CustomerService] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-16T02:15:12.870+03:30  INFO 208914 --- [CustomerService] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
