@@ -51,7 +51,7 @@ public class CustomerService {
         customer.setPhone(cr.getPhone());
         customer.setAddress(cr.getAddress());
         customer.setPostalCode(cr.getPostalCode());
-
+        customer.setAccountNumber(cr.getAccount_number());
         Customer saved =  customerRepository.save(customer);
         sendAccountCreationMessage(saved);
         return saved;
@@ -139,6 +139,7 @@ public class CustomerService {
         
         ChangeLog changeLog = new ChangeLog();
         changeLog.setAccount(updatedCustomer);
+        changeLog.setFieldName(fieldName);
         changeLog.setOldValue(oldValue);
         changeLog.setNewValue(newValue.toString());
         changeLog.setChangedAt(LocalDateTime.now());

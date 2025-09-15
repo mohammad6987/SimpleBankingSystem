@@ -14,6 +14,16 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 @Configuration
 public class SecurityConfig {
 
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable()) // disable CSRF
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); // allow all requests
+
+        return http.build();
+    }
+/* 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -22,7 +32,8 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/v3/api-docs/**",
                         "/swagger-ui.html",
-                        "/swagger-ui/**"
+                        "/swagger-ui/**",
+                        "/customers/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
@@ -36,9 +47,9 @@ public class SecurityConfig {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
         jdbcUserDetailsManager.setUsersByUsernameQuery(
-            "SELECT username, password, enabled FROM users WHERE username = ?");
+            "SELECT username, password, enabled FROM system.app_users WHERE username = ?");
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-            "SELECT username, authority FROM authorities WHERE username = ?");
+            "SELECT username, authority FROM system.app_authorities WHERE username = ?");
 
         return jdbcUserDetailsManager;
     }
@@ -47,7 +58,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+*/
     @Bean
     public CommonsRequestLoggingFilter requestLoggingFilter() {
         CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();

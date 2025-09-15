@@ -25,7 +25,11 @@ public class TransactionQueueService {
         account.setAccountNumber(message.getAccountNumber());
         account.setBalance(BigDecimal.ZERO);
         account.setStatus(Account.AccountStatus.ACTIVE);
-        accountRepository.save(account);
+        try {
+            accountRepository.save(account);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         System.out.println("saved an account successfully!");
         
     }
