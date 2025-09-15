@@ -34,3 +34,54 @@
 2025-09-15T22:04:19.570+03:30  INFO 111879 --- [TransactionService] [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
 2025-09-15T22:04:19.596+03:30  INFO 111879 --- [TransactionService] [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#2adb532c:0/SimpleConnection@173b1683 [delegate=amqp://myuser@127.0.0.1:5672/, localPort=36500]
 2025-09-15T22:04:19.628+03:30  INFO 111879 --- [TransactionService] [main] B.T.TransactionServiceApplication        : Started TransactionServiceApplication in 3.53 seconds (process running for 3.684)
+2025-09-15T22:08:24.537+03:30  INFO 111879 --- [TransactionService] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2025-09-15T22:08:24.663+03:30  INFO 111879 --- [TransactionService] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2025-09-15T22:08:24.665+03:30  INFO 111879 --- [TransactionService] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-15T22:08:24.669+03:30  INFO 111879 --- [TransactionService] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-15T22:08:24.684+03:30  INFO 111879 --- [TransactionService] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-15T22:08:24.687+03:30  INFO 111879 --- [TransactionService] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-15T22:08:24.699+03:30  INFO 111879 --- [TransactionService] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-09-15T22:08:27.707+03:30  INFO 114111 --- [TransactionService] [main] B.T.TransactionServiceApplication        : Starting TransactionServiceApplication using Java 17.0.16 with PID 114111 (/G/banking/TransactionService/target/classes started by mohammad in /G/banking/TransactionService)
+2025-09-15T22:08:27.709+03:30  INFO 114111 --- [TransactionService] [main] B.T.TransactionServiceApplication        : No active profile set, falling back to 1 default profile: "default"
+2025-09-15T22:08:28.161+03:30  INFO 114111 --- [TransactionService] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-15T22:08:28.202+03:30  INFO 114111 --- [TransactionService] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 35 ms. Found 4 JPA repository interfaces.
+2025-09-15T22:08:28.490+03:30  INFO 114111 --- [TransactionService] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-09-15T22:08:28.499+03:30  INFO 114111 --- [TransactionService] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-15T22:08:28.500+03:30  INFO 114111 --- [TransactionService] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-09-15T22:08:28.533+03:30  INFO 114111 --- [TransactionService] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-15T22:08:28.533+03:30  INFO 114111 --- [TransactionService] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 800 ms
+2025-09-15T22:08:28.563+03:30 DEBUG 114111 --- [TransactionService] [main] o.s.w.f.CommonsRequestLoggingFilter      : Filter 'requestLoggingFilter' configured for use
+2025-09-15T22:08:28.678+03:30  INFO 114111 --- [TransactionService] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-15T22:08:28.710+03:30  INFO 114111 --- [TransactionService] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-15T22:08:28.731+03:30  INFO 114111 --- [TransactionService] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-15T22:08:28.895+03:30  INFO 114111 --- [TransactionService] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-15T22:08:28.915+03:30  INFO 114111 --- [TransactionService] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-15T22:08:29.114+03:30  INFO 114111 --- [TransactionService] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection oracle.jdbc.driver.T4CConnection@5315266
+2025-09-15T22:08:29.115+03:30  INFO 114111 --- [TransactionService] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-15T22:08:29.200+03:30  WARN 114111 --- [TransactionService] [main] org.hibernate.orm.deprecation            : HHH90000025: OracleDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-15T22:08:29.264+03:30  INFO 114111 --- [TransactionService] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 23.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-15T22:08:29.890+03:30  INFO 114111 --- [TransactionService] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-15T22:08:30.068+03:30  INFO 114111 --- [TransactionService] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-15T22:08:30.247+03:30  INFO 114111 --- [TransactionService] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-15T22:08:30.643+03:30  WARN 114111 --- [TransactionService] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-15T22:08:30.668+03:30  INFO 114111 --- [TransactionService] [main] o.s.s.p.JdbcUserDetailsManager           : No authentication manager set. Reauthentication of users when changing passwords will not be performed.
+2025-09-15T22:08:30.672+03:30  INFO 114111 --- [TransactionService] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsService
+2025-09-15T22:08:30.850+03:30  INFO 114111 --- [TransactionService] [main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2025-09-15T22:08:31.061+03:30  INFO 114111 --- [TransactionService] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-09-15T22:08:31.065+03:30  INFO 114111 --- [TransactionService] [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-09-15T22:08:31.099+03:30  INFO 114111 --- [TransactionService] [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#45682e3e:0/SimpleConnection@38485cee [delegate=amqp://myuser@127.0.0.1:5672/, localPort=56282]
+2025-09-15T22:08:31.186+03:30  INFO 114111 --- [TransactionService] [main] B.T.TransactionServiceApplication        : Started TransactionServiceApplication in 3.767 seconds (process running for 3.929)
+2025-09-15T22:08:57.327+03:30  INFO 114111 --- [TransactionService] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2025-09-15T22:08:58.177+03:30  INFO 114111 --- [TransactionService] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2025-09-15T22:08:58.181+03:30  INFO 114111 --- [TransactionService] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-15T22:08:58.186+03:30  INFO 114111 --- [TransactionService] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-15T22:08:58.198+03:30  INFO 114111 --- [TransactionService] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-15T22:08:58.202+03:30  INFO 114111 --- [TransactionService] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-15T22:08:58.218+03:30  INFO 114111 --- [TransactionService] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
