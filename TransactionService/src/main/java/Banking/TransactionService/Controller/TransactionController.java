@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/transactions")
 public class TransactionController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class TransactionController {
         try {
             Transaction transaction = transactionService.deposit(request.getAccountNumber(), request.getAmount());
             
-            // Get the updated account balance
+   
             BigDecimal balance = transactionService.getBalance(request.getAccountNumber());
             
             TransactionResponse response = new TransactionResponse(
@@ -59,7 +59,7 @@ public class TransactionController {
         try {
             Transaction transaction = transactionService.withdraw(request.getAccountNumber(), request.getAmount());
             
-            // Get the updated account balance
+       
             BigDecimal balance = transactionService.getBalance(request.getAccountNumber());
             
             TransactionResponse response = new TransactionResponse(
@@ -91,8 +91,7 @@ public class TransactionController {
                 request.getToAccountNumber(),
                 request.getAmount()
             );
-            
-            // Get the updated account balance
+    
             BigDecimal balance = transactionService.getBalance(request.getFromAccountNumber());
             
             TransactionResponse response = new TransactionResponse(
